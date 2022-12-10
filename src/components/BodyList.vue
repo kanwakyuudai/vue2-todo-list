@@ -6,6 +6,10 @@
     :todo="todoObj"
     :checkTodo="checkTodo"
     :deleteTodo="deleteTodo"
+    :editTodo="editTodo"
+    :doneEdit="doneEdit"
+    :cancelEdit="cancelEdit"
+    :editedTodo="editedTodo"
     ></ListItem>
   </ul>
 </template>
@@ -16,7 +20,7 @@
   export default {
     name: 'BodyList',
     components: {ListItem},
-    props: ['todoSet', 'checkTodo', 'deleteTodo']
+    props: ['todoSet', 'checkTodo', 'deleteTodo', 'editTodo', 'doneEdit', 'cancelEdit', 'editedTodo']
   }
 </script>
 

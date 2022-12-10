@@ -3,7 +3,7 @@
     <div class="todo-container">
       <div class="todo-wrap">
         <HeaderInput :addTodo="addTodo"></HeaderInput>
-        <BodyList :todoSet="todoSet" :checkTodo="checkTodo" :deleteTodo="deleteTodo"></BodyList>
+        <BodyList :todoSet="todoSet" :checkTodo="checkTodo" :deleteTodo="deleteTodo" :editTodo="editTodo" :doneEdit="doneEdit" :cancelEdit="cancelEdit" :editedTodo='editedTodo'></BodyList>
         <FooterArea :todoSet="todoSet" :checkAllTodo="checkAllTodo" :clearAllTodo="clearAllTodo"></FooterArea>
       </div>
     </div>
@@ -20,6 +20,7 @@ export default {
   components: {HeaderInput, BodyList, FooterArea},
   data() {
     return {
+      editedTodo: null,
       todoSet: JSON.parse(localStorage.getItem('todo-list-data')) || []
     }
   },
@@ -42,7 +43,25 @@ export default {
     },
     clearAllTodo() {
       this.todoSet = this.todoSet.filter(item => !item.done)
-    }
+    },
+    editTodo(todo) {
+      this.beforeEditCache = todo.title;
+      this.editedTodo = todo;
+    },
+    doneEdit(todo) {
+      if (!this.editedTodo) {
+        return;
+      }
+      this.editedTodo = null;
+      todo.title = todo.title.trim();
+      if (!todo.title) {
+        this.deleteTodo(todo);
+      }
+    },
+    cancelEdit(todo) {
+      this.editedTodo = null;
+      todo.title = this.beforeEditCache;
+    },
   },
   watch: {
     todoSet: {

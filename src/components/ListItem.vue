@@ -1,23 +1,45 @@
 <template>
   <li>
-    <label>
-      <input type="checkbox" :checked="todo.done" @change="handleCheck(todo.id)"/>
-      <span>{{todo.title}}</span>
-    </label>
+    <input type="checkbox" :checked="todo.done" @change="handleCheck(todo.id)"/>
+    <span v-show='!showEdit' @dblclick="toggleEdit(todo)">{{todo.title}}</span>
     <button class="btn btn-danger" @click="handleDelete(todo.id)">刪除事項</button>
+    <input v-show='showEdit'
+    class="edit"
+    type="text"
+    v-model="todo.title"
+    @blur="handleEdited(todo)"
+    @keyup.enter="handleEdited(todo)"
+    @keyup.esc="handleCancelEdit(todo)"/>
   </li>
 </template>
 
 <script>
   export default {
     name: 'ListItem',
-    props: ['todo','checkTodo','deleteTodo'],
+    props: ['todo','checkTodo','deleteTodo', 'editTodo', 'doneEdit', 'cancelEdit', 'editedTodo'],
+    data() {
+      return {
+        showEdit: false
+      }
+    },
     methods: {
       handleCheck(id) {
         this.checkTodo(id)
       },
       handleDelete(id) {
         this.deleteTodo(id)
+      },
+      toggleEdit(todo) {
+        this.showEdit = true
+        this.editTodo(todo)
+      },
+      handleEdited(todo) {
+        this.doneEdit(todo)
+        this.showEdit = false
+      },
+      handleCancelEdit(todo) {
+        this.cancelEdit(todo)
+        this.showEdit = false
       }
     }
   }
